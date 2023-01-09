@@ -1,15 +1,22 @@
 import database.DBCreate;
+import database.DBInsert;
+
 
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Controller {
 
+    Connection conn;
+
     public Controller() throws SQLException {
-        Connection conn = connect();
+        this.conn = connect();
         new DBCreate(conn);
+        start();
     }
 
     public Connection connect() {
@@ -24,6 +31,19 @@ public class Controller {
             throw new RuntimeException(e);
         }
         return conn;
+    }
+
+    public void start(){
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                new DBInsert(conn);
+            }
+        };
+        task.run();
+        timer.scheduleAtFixedRate(task, 0, 1000 * 60 * 60); // 1000 milliseconds * 60 seconds * 60 minutes
+
     }
 
 }

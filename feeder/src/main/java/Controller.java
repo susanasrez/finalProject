@@ -1,6 +1,7 @@
 import aemet.*;
 import datalake.FileDatalake;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class Controller extends TimerTask{
@@ -8,7 +9,7 @@ public class Controller extends TimerTask{
     private final WeatherSensor weatherSensor;
 
     public Controller(String apiToken){
-        this.root = new File(".\\feeder\\datalake");
+        this.root = new File(".\\feeder\\datalakedir");
         this.weatherSensor = new AemetWeatherSensor(apiToken);
         directory();
         start();
@@ -19,7 +20,12 @@ public class Controller extends TimerTask{
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                List<Weather> weatherList = weatherSensor.read();
+                List<Weather> weatherList;
+                try {
+                    weatherList = weatherSensor.read();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 FileDatalake fileDatalake = new FileDatalake(root);
                 fileDatalake.save(weatherList);
             }

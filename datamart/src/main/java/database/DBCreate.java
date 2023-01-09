@@ -15,20 +15,28 @@ public class DBCreate implements DBManager{
 
     public void create() throws SQLException {
         try (Statement statement = conn.createStatement()) {
+            statement.execute("DROP TABLE IF EXISTS maximum;");
+            statement.execute("DROP TABLE IF EXISTS minimum;");
             statement.execute("CREATE TABLE IF NOT EXISTS maximum (" +
-                    "date TEXT PRIMARY KEY, " +
-                    "time TEXT NOT NULL, " +
-                    "place TEXT NOT NULL," +
-                    "station TEXT NOT NULL," +
-                    "value DOUBLE" +
+                    "value DOUBLE, " +
+                    "date TEXT," +
+                    "time TEXT, " +
+                    "place TEXT," +
+                    "station TEXT" +
                     ")");
             statement.execute("CREATE TABLE IF NOT EXISTS minimum (" +
-                    "date TEXT PRIMARY KEY, " +
-                    "time TEXT NOT NULL, " +
-                    "place TEXT NOT NULL," +
-                    "station TEXT NOT NULL," +
-                    "value DOUBLE" +
+                    "value DOUBLE, "+
+                    "date TEXT, " +
+                    "time TEXT," +
+                    "place TEXT," +
+                    "station TEXT" +
                     ")");
         }
     }
+
+    @Override
+    public void insert() {
+
+    }
+
 }

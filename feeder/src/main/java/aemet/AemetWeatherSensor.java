@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 
 public class AemetWeatherSensor implements WeatherSensor{
@@ -18,29 +20,29 @@ public class AemetWeatherSensor implements WeatherSensor{
         this.apiKey = apiKey;
     }
 
-    public List<Weather> read() {
+    public List<Weather> read() throws IOException {
         Gson gson = new Gson();
-        try{
-            String res = request(url);
-            JsonObject jsonObject = gson.fromJson(res, JsonObject.class);
-            String urlData = jsonObject.get("datos").getAsString();
-            String content = request(urlData);
-            JsonArray jsonElements = gson.fromJson(content, JsonArray.class);
-            List<Weather> weatherList = new ArrayList<>();
-            for (JsonElement jsonElement : jsonElements) {
-                JsonObject o = (JsonObject) jsonElement;
-                if (-16.00 < o.get("lon").getAsDouble() && o.get("lon").getAsDouble() < -15.00 &&
-                        27.5 < o.get("lat").getAsDouble() && o.get("lat").getAsDouble() < 28.4) {
-                    weatherList.add(toWeather(o));
-                }
-            }
-            return weatherList;
-        } catch (IOException e){
-            throw new RuntimeException(e);
-        }
+        String res = request(url);
+        JsonObject jsonObject = gson.fromJson(res, JsonObject.class);
+        String urlData = jsonObject.get("datos").getAsString();
+        String content = request(urlData);
+        JsonArray jsonElements = gson.fromJson(content, JsonArray.class);
+        return readArea(jsonElements);
     }
 
-    private String request(String url) throws IOException {
+    public List<Weather> readArea(JsonArray jsonElements){
+        List<Weather> weatherList = new ArrayList<>();
+        for (JsonElement jsonElement : jsonElements) {
+            JsonObject o = (JsonObject) jsonElement;
+            weatherList.add(toWeather(o));
+        }
+        return weatherList.stream()
+                .filter(w -> w.getLatitud() > 27.5 && w.getLatitud() < 28.4)
+                .filter(w -> w.getLongitud() > -16.00 && w.getLongitud() < -15.00)
+                .collect(Collectors.toList());
+    }
+
+    public String request(String url) throws IOException {
         return Jsoup.connect(url)
                 .ignoreContentType(true)
                 .header("accept", "application/json")
@@ -54,7 +56,13 @@ public class AemetWeatherSensor implements WeatherSensor{
         weather.setTs(LocalDateTime.parse(o.get("fint").getAsString()));
         weather.setPlace(o.get("ubi").getAsString());
         weather.setStation(o.get("idema").getAsString());
-        weather.setTemperature(o.get("ta").getAsDouble());
+        try {
+            weather.setTemperature(o.get("ta").getAsDouble());
+        }catch (NullPointerException e){
+            weather.setTemperature(0.0);
+        }
+        weather.setLatitud(o.get("lat").getAsDouble());
+        weather.setLongitud(o.get("lon").getAsDouble());
         return weather;
     }
 

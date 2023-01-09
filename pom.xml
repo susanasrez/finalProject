@@ -11,6 +11,7 @@
     <modules>
         <module>feeder</module>
         <module>datamart</module>
+        <module>apiRest</module>
     </modules>
 
     <properties>

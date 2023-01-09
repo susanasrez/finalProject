@@ -8,6 +8,10 @@ public class Weather {
     String station;
     Double temperature;
 
+    Double latitud;
+
+    Double longitud;
+
     public Weather(){
 
     }
@@ -26,5 +30,32 @@ public class Weather {
 
     public void setTemperature(Double temperature){
         this.temperature = temperature;
+    }
+
+    public void setLatitud(Double latitud){this.latitud = latitud;}
+
+    public void setLongitud(Double longitud){this.longitud = longitud;}
+
+    public LocalDateTime getTs(){
+        return ts;
+    }
+
+    public String getPlace(){
+        return place;
+    }
+
+    public String getStation(){
+        return station;
+    }
+
+    public Double getTemperature(){
+        return temperature;
+    }
+
+    public Double getLongitud(){
+        return longitud;
+    }
+    public Double getLatitud(){
+        return latitud;
     }
 }
