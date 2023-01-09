@@ -1,3 +1,5 @@
+package aemet;
+
 import com.google.gson.*;
 
 import org.jsoup.*;

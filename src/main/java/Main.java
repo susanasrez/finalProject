@@ -13,8 +13,8 @@ public class Main {
         }*/
 
         String apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXNhbmFzdWFyZXptZW5kb3phMjZAZ21haWwuY29tIiwianRpIjoiMmY1NDQ1MGYtMTc5Mi00MzM3LTlhODQtNDQ0NGZjZTg5MjYyIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE2NzMwOTM3MTQsInVzZXJJZCI6IjJmNTQ0NTBmLTE3OTItNDMzNy05YTg0LTQ0NDRmY2U4OTI2MiIsInJvbGUiOiIifQ.pXIbNRFJKXQwHbizkuiXdxq_7Jtdk8inUdfs6eWqMfM";
-        //File rootDatalake = new File("C:\\Users\\Susana\\Desktop\\Universidad\\Segundo de Ingenieria de datos\\aemetDataLake");
+        String rootDatalake = "C:\\Users\\Susana\\Desktop\\Universidad\\Segundo de Ingenieria de datos";
 
-        new Controller(apiKey);
+        new Controller(apiKey, rootDatalake);
     }
 }

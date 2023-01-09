@@ -1,16 +1,27 @@
+import aemet.AemetWeatherSensor;
+import aemet.Weather;
+import aemet.WeatherSensor;
+import datalake.Datalake;
+import datalake.FileDatalake;
+
+import java.io.File;
 import java.util.List;
 import java.util.TimerTask;
 public class Controller extends TimerTask{
 
-    //Private final Datalake datalake;
+    private final File root;
 
-    public Controller(String apiToken){
-        //private WeatherSensor sensor;
+    public Controller(String apiToken, String root){
+        this.root = new File("//" + root + "//datalake");
+        directory();
+        WeatherSensor weatherSensor = new AemetWeatherSensor(apiToken);
+        List<Weather> weatherList = ((AemetWeatherSensor) weatherSensor).read();
+        FileDatalake fileDatalake = new FileDatalake(this.root);
+        fileDatalake.save(weatherList);
+
+        //private aemet.WeatherSensor sensor;
         //private final File root;
         //root = rootDatalake;
-        AemetWeatherSensor sensor1 = new AemetWeatherSensor(apiToken);
-        List<Weather> weatherList = sensor1.read();
-        System.out.println(weatherList);
     }
 
     /*public void start(){
@@ -22,7 +33,14 @@ public class Controller extends TimerTask{
 
     @Override
     public void run() {
-        //sensor = new AemetWeatherSensor(apiToken);
+        //sensor = new aemet.AemetWeatherSensor(apiToken);
         //datalake = new FileDatalake(rootDatalake);
+    }
+
+    public void directory(){
+        if (!root.exists()) {
+            root.mkdirs();
+            System.out.println("Directory created successfully");
+        }
     }
 }
