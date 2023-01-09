@@ -7,8 +7,8 @@ public class Controller extends TimerTask{
     private final File root;
     private final WeatherSensor weatherSensor;
 
-    public Controller(String apiToken, String root){
-        this.root = new File("//" + root + "//datalake");
+    public Controller(String apiToken){
+        this.root = new File(".\\feeder\\datalake");
         this.weatherSensor = new AemetWeatherSensor(apiToken);
         directory();
         start();
@@ -19,13 +19,13 @@ public class Controller extends TimerTask{
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                List<Weather> weatherList = ((AemetWeatherSensor) weatherSensor).read();
+                List<Weather> weatherList = weatherSensor.read();
                 FileDatalake fileDatalake = new FileDatalake(root);
                 fileDatalake.save(weatherList);
             }
         };
         task.run();
-        timer.scheduleAtFixedRate(task, 1000 * 60 * 60, 1000 * 60 * 60); // 1000 milliseconds * 60 seconds * 60 minutes
+        timer.scheduleAtFixedRate(task, 0, 1000 * 60 * 60); // 1000 milliseconds * 60 seconds * 60 minutes
 
     }
 
