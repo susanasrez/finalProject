@@ -1,46 +1,48 @@
 import aemet.AemetWeatherSensor;
 import aemet.Weather;
 import aemet.WeatherSensor;
-import datalake.Datalake;
 import datalake.FileDatalake;
 
 import java.io.File;
 import java.util.List;
+import java.util.Timer;
 import java.util.TimerTask;
 public class Controller extends TimerTask{
-
     private final File root;
+    private final WeatherSensor weatherSensor;
 
     public Controller(String apiToken, String root){
         this.root = new File("//" + root + "//datalake");
+        this.weatherSensor = new AemetWeatherSensor(apiToken);
         directory();
-        WeatherSensor weatherSensor = new AemetWeatherSensor(apiToken);
-        List<Weather> weatherList = ((AemetWeatherSensor) weatherSensor).read();
-        FileDatalake fileDatalake = new FileDatalake(this.root);
-        fileDatalake.save(weatherList);
-
-        //private aemet.WeatherSensor sensor;
-        //private final File root;
-        //root = rootDatalake;
+        start();
     }
 
-    /*public void start(){
+    public void start(){
         Timer timer = new Timer();
-        //HourlyTask task = new HourlyTask();
-        //timer.scheduleAtFixedRate(task, 0, 3600000);
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                List<Weather> weatherList = ((AemetWeatherSensor) weatherSensor).read();
+                FileDatalake fileDatalake = new FileDatalake(root);
+                fileDatalake.save(weatherList);
+            }
+        };
+        task.run();
+        timer.scheduleAtFixedRate(task, 1000 * 60 * 60, 1000 * 60 * 60); // 1000 milliseconds * 60 seconds * 60 minutes
 
-    }*/
-
-    @Override
-    public void run() {
-        //sensor = new aemet.AemetWeatherSensor(apiToken);
-        //datalake = new FileDatalake(rootDatalake);
     }
+
 
     public void directory(){
         if (!root.exists()) {
             root.mkdirs();
             System.out.println("Directory created successfully");
         }
+    }
+
+    @Override
+    public void run() {
+
     }
 }
