@@ -1,12 +1,8 @@
-import aemet.AemetWeatherSensor;
-import aemet.Weather;
-import aemet.WeatherSensor;
+import aemet.*;
 import datalake.FileDatalake;
-
 import java.io.File;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
+
 public class Controller extends TimerTask{
     private final File root;
     private final WeatherSensor weatherSensor;
