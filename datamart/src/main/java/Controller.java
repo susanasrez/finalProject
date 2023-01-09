@@ -1,5 +1,6 @@
 import database.DBCreate;
 import database.DBInsert;
+import database.prueba;
 
 
 import java.io.File;
@@ -16,7 +17,8 @@ public class Controller {
     public Controller() throws SQLException {
         this.conn = connect();
         new DBCreate(conn);
-        start();
+        new prueba(conn);
+        //start();
     }
 
     public Connection connect() {
@@ -38,7 +40,11 @@ public class Controller {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                new DBInsert(conn);
+                try {
+                    new DBInsert(conn);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         };
         task.run();

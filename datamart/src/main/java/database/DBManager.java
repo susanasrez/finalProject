@@ -6,6 +6,8 @@ public interface DBManager {
 
     void create() throws SQLException;
 
-    void insert();
+    void insert() throws SQLException;
+
+    void delete();
 
 }

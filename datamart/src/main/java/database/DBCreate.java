@@ -39,4 +39,9 @@ public class DBCreate implements DBManager{
 
     }
 
+    @Override
+    public void delete() {
+
+    }
+
 }
