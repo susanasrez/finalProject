@@ -1,5 +1,4 @@
-import select.Select;
-import select.SelectMax;
+import select.SelectMaxMin;
 
 import java.io.File;
 import java.sql.Connection;
@@ -9,17 +8,15 @@ import java.sql.SQLException;
 public class Controller {
 
     Connection conn;
-    public Controller() throws SQLException {
+    public Controller(){
         this.conn = connect();
-        Select select = new SelectMax(conn);
-        ((SelectMax) select).maximum("2023-01-02", "2023-01-05");
+        new SelectMaxMin(conn);
     }
 
     public Connection connect() {
         String dbPath = ".\\datamart\\datamart.db";
         File dbFile = new File(dbPath);
         String absolutePath = "jdbc:sqlite:" + dbFile.getAbsolutePath();
-        Connection conn;
         try {
             conn = DriverManager.getConnection(absolutePath);
             System.out.println("Connection to SQLite has been established.");

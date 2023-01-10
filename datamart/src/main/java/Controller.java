@@ -1,7 +1,5 @@
 import database.DBCreate;
 import database.DBInsert;
-import database.prueba;
-
 
 import java.io.File;
 import java.sql.Connection;
@@ -17,15 +15,15 @@ public class Controller {
     public Controller() throws SQLException {
         this.conn = connect();
         new DBCreate(conn);
-        new prueba(conn);
-        //start();
+        //new prueba(conn);
+        start();
     }
 
     public Connection connect() {
         String dbPath = ".\\datamart\\datamart.db";
         File dbFile = new File(dbPath);
         String absolutePath = "jdbc:sqlite:" + dbFile.getAbsolutePath();
-        Connection conn;
+        System.out.println(absolutePath);
         try {
             conn = DriverManager.getConnection(absolutePath);
             System.out.println("Connection to SQLite has been established.");

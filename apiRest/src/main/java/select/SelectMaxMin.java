@@ -13,21 +13,39 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectMax implements Select{
+public class SelectMaxMin implements Select{
 
     Connection conn;
 
-    public SelectMax(Connection conn){
+    public SelectMaxMin(Connection conn){
         this.conn = conn;
     }
 
-    public void maximum(String from, String to) throws SQLException {
+    public Weather maximum(String from, String to) throws SQLException {
        List<LocalDate> days = days(from,to);
        List<Weather> weatherList = select(days);
-        for (Weather weather : weatherList) {
-            System.out.println(weather.toString());
-        }
-        //obtener el máximo de los weather
+       return weatherList.stream()
+                .reduce((w1,w2)-> {
+                    if(w1.getTemperature() > w2.getTemperature()){
+                        return w1;
+                    }
+                    else{
+                        return w2;
+                    }
+                }).orElse(null);
+    }
+    public Weather minimum(String from, String to) throws SQLException {
+        List<LocalDate> days = days(from,to);
+        List<Weather> weatherList = select(days);
+        return weatherList.stream()
+                .reduce((w1,w2)-> {
+                    if(w1.getTemperature() < w2.getTemperature()){
+                        return w1;
+                    }
+                    else{
+                        return w2;
+                    }
+                }).orElse(null);
     }
 
     public List<LocalDate> days(String from, String to){
@@ -39,6 +57,7 @@ public class SelectMax implements Select{
         for (LocalDate date = start; date.isBefore(end); date = date.plusDays(1)) {
             localDates.add(date);
         }
+        localDates.add(end);
         return localDates;
     }
 
