@@ -15,7 +15,6 @@ public class Controller {
     public Controller() throws SQLException {
         this.conn = connect();
         new DBCreate(conn);
-        //new prueba(conn);
         start();
     }
 

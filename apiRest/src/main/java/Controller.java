@@ -1,3 +1,5 @@
+import api.ApiAemet;
+import select.Select;
 import select.SelectMaxMin;
 
 import java.io.File;
@@ -8,9 +10,11 @@ import java.sql.SQLException;
 public class Controller {
 
     Connection conn;
+    Select select;
     public Controller(){
         this.conn = connect();
-        new SelectMaxMin(conn);
+        select = new SelectMaxMin(conn);
+        new ApiAemet((SelectMaxMin) select);
     }
 
     public Connection connect() {
@@ -25,4 +29,6 @@ public class Controller {
         }
         return conn;
     }
+
+
 }

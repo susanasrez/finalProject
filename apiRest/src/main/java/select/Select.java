@@ -14,7 +14,8 @@ public interface Select {
 
     Weather minimum(String from, String to) throws SQLException;
     List<LocalDate> days(String from, String to);
-    List<Weather> select(List<LocalDate> days) throws SQLException;
+    List<Weather> selectMax(List<LocalDate> days) throws SQLException;
+    List<Weather> selectMin(List<LocalDate> days) throws SQLException;
 
     LocalDateTime toLocalDateTime(ResultSet rs) throws SQLException;
 

@@ -23,7 +23,7 @@ public class SelectMaxMin implements Select{
 
     public Weather maximum(String from, String to) throws SQLException {
        List<LocalDate> days = days(from,to);
-       List<Weather> weatherList = select(days);
+       List<Weather> weatherList = selectMax(days);
        return weatherList.stream()
                 .reduce((w1,w2)-> {
                     if(w1.getTemperature() > w2.getTemperature()){
@@ -36,7 +36,7 @@ public class SelectMaxMin implements Select{
     }
     public Weather minimum(String from, String to) throws SQLException {
         List<LocalDate> days = days(from,to);
-        List<Weather> weatherList = select(days);
+        List<Weather> weatherList = selectMin(days);
         return weatherList.stream()
                 .reduce((w1,w2)-> {
                     if(w1.getTemperature() < w2.getTemperature()){
@@ -61,9 +61,29 @@ public class SelectMaxMin implements Select{
         return localDates;
     }
 
-    public List<Weather> select(List<LocalDate> days) throws SQLException {
+    public List<Weather> selectMax(List<LocalDate> days) throws SQLException {
         List<Weather> weatherList = new ArrayList<>();
         String sql = "SELECT * FROM maximum WHERE date = ?";
+        for (LocalDate day : days) {
+            String date = day.toString();
+            Weather weather = new Weather();
+            PreparedStatement s = conn.prepareStatement(sql);
+            s.setString(1, date);
+            ResultSet rs = s.executeQuery();
+            while(rs.next()) {
+                weather.setTemperature(rs.getDouble("value"));
+                weather.setPlace(rs.getString("place"));
+                weather.setStation(rs.getString("station"));
+                weather.setTs(toLocalDateTime(rs));
+            }
+            weatherList.add(weather);
+        }
+        return weatherList;
+    }
+
+    public List<Weather> selectMin(List<LocalDate> days) throws SQLException {
+        List<Weather> weatherList = new ArrayList<>();
+        String sql = "SELECT * FROM minimum WHERE date = ?";
         for (LocalDate day : days) {
             String date = day.toString();
             Weather weather = new Weather();
