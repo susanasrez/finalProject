@@ -1,15 +1,13 @@
 package aemet;
 
 import com.google.gson.*;
-
 import org.jsoup.*;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-
 
 public class AemetWeatherSensor implements WeatherSensor{
 
@@ -39,6 +37,7 @@ public class AemetWeatherSensor implements WeatherSensor{
         return weatherList.stream()
                 .filter(w -> w.getLatitud() > 27.5 && w.getLatitud() < 28.4)
                 .filter(w -> w.getLongitud() > -16.00 && w.getLongitud() < -15.00)
+                .filter(w -> w.getTs().toLocalDate().equals(LocalDate.now()))
                 .collect(Collectors.toList());
     }
 
@@ -65,6 +64,5 @@ public class AemetWeatherSensor implements WeatherSensor{
         weather.setLongitud(o.get("lon").getAsDouble());
         return weather;
     }
-
 
 }

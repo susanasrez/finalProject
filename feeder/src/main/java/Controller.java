@@ -30,11 +30,8 @@ public class Controller extends TimerTask{
                 fileDatalake.save(weatherList);
             }
         };
-        task.run();
         timer.scheduleAtFixedRate(task, 0, 1000 * 60 * 60); // 1000 milliseconds * 60 seconds * 60 minutes
-
     }
-
 
     public void directory(){
         if (!root.exists()) {
@@ -45,6 +42,5 @@ public class Controller extends TimerTask{
 
     @Override
     public void run() {
-
     }
 }

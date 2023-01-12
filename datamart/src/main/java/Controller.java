@@ -22,7 +22,6 @@ public class Controller {
         String dbPath = ".\\datamart\\datamart.db";
         File dbFile = new File(dbPath);
         String absolutePath = "jdbc:sqlite:" + dbFile.getAbsolutePath();
-        System.out.println(absolutePath);
         try {
             conn = DriverManager.getConnection(absolutePath);
             System.out.println("Connection to SQLite has been established.");
@@ -44,9 +43,7 @@ public class Controller {
                 }
             }
         };
-        task.run();
-        timer.scheduleAtFixedRate(task, 0, 1000 * 60 * 60); // 1000 milliseconds * 60 seconds * 60 minutes
-
+        timer.scheduleAtFixedRate(task, 1000*60, 1000 * 60 * 60);
     }
 
 }

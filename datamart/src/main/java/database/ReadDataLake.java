@@ -17,13 +17,11 @@ import java.util.Scanner;
 public class ReadDataLake {
 
     public ReadDataLake(){
-
     }
 
     public List<Weather> read(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYYMMDD");
         File file = new File(".\\feeder\\datalakedir\\" + formatter.format(LocalDate.now()) + ".events");
-
         try {
             Scanner input = new Scanner(file);
             List<Weather> weatherList = new ArrayList<>();

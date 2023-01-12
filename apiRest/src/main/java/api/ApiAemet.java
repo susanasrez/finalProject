@@ -10,7 +10,6 @@ import java.time.LocalDate;
 
 import static spark.Spark.port;
 
-
 public class ApiAemet implements Api{
 
     Select select;
@@ -19,6 +18,7 @@ public class ApiAemet implements Api{
         select = selectMaxMin;
         initializeRoutes();
     }
+
     public void initializeRoutes() {
 
         port(8080);
@@ -38,7 +38,6 @@ public class ApiAemet implements Api{
         });
 
     }
-
 
     public String jsonTransformerMax(String from, String to) throws SQLException {
         Weather weatherMax = select.maximum(from, to);

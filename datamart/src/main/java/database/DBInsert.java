@@ -7,7 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-
 public class DBInsert implements DBManager{
 
     private final Connection conn;
@@ -17,11 +16,11 @@ public class DBInsert implements DBManager{
         insert();
     }
 
-    public void insert() throws SQLException {
+    public void insert() {
         delete();
-        String sqlMax = "INSERT INTO maximum(date,time,place,station,value) VALUES(?,?,?,?,?)";
         ReadDataLake readDataLake = new ReadDataLake();
         Weather max = readDataLake.maximum();
+        String sqlMax = "INSERT INTO maximum(date,time,place,station,value) VALUES(?,?,?,?,?)";
         try (PreparedStatement pstm = conn.prepareStatement(sqlMax)){
             pstm.setString(1, max.getTs().toLocalDate().toString());
             pstm.setString(2, max.getTs().toLocalTime().toString());
@@ -30,7 +29,7 @@ public class DBInsert implements DBManager{
             pstm.setDouble(5, max.getTemperature());
             pstm.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
         String sqlMin = "INSERT INTO minimum(date,time,place,station,value) VALUES(?,?,?,?,?)";
         Weather min = readDataLake.minimum();
@@ -42,7 +41,7 @@ public class DBInsert implements DBManager{
             pstm.setDouble(5, min.getTemperature());
             pstm.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -53,19 +52,17 @@ public class DBInsert implements DBManager{
             delMax.setString(1, LocalDate.now().toString());
             delMax.executeUpdate();
         }catch (SQLException e) {
-            System.out.println(e);
+            throw new RuntimeException(e);
         }
         try(PreparedStatement delMin = conn.prepareStatement(SqlDeleteMin)){
             delMin.setString(1, LocalDate.now().toString());
             delMin.executeUpdate();
         }catch (SQLException e) {
-        System.out.println(e);
+            throw new RuntimeException(e);
         }
     }
 
-
     @Override
     public void create() {
-
     }
 }
