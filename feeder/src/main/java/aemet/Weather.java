@@ -7,13 +7,10 @@ public class Weather {
     String place;
     String station;
     Double temperature;
-
     Double latitud;
-
     Double longitud;
 
     public Weather(){
-
     }
 
     public void setTs(LocalDateTime ts){

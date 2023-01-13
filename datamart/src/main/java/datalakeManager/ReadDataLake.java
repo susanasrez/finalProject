@@ -1,4 +1,4 @@
-package database;
+package datalakeManager;
 
 import aemet.Weather;
 import com.google.gson.Gson;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class ReadDataLake {
+public class ReadDataLake implements DatalakeManager{
 
     public ReadDataLake(){
     }
@@ -42,32 +42,6 @@ public class ReadDataLake {
         }
     }
 
-    public Weather maximum(){
-        List<Weather> weatherList = read();
-        return weatherList.stream()
-                .reduce((w1,w2)-> {
-                    if(w1.getTemperature() > w2.getTemperature()){
-                        return w1;
-                    }
-                    else{
-                        return w2;
-                    }
-                }).orElse(null);
-    }
-
-    public Weather minimum(){
-        List<Weather> weatherList = read();
-        return weatherList.stream()
-                .reduce((w1,w2)-> {
-                    if(w1.getTemperature() < w2.getTemperature()){
-                        return w1;
-                    }
-                    else{
-                        return w2;
-                    }
-                }).orElse(null);
-    }
-
     public Weather toWeather(JsonObject o){
         Weather weather = new Weather();
         weather.setTs(toLocalDateTime(o));
@@ -91,4 +65,7 @@ public class ReadDataLake {
         return  LocalDateTime.of(year, month, day, hour, minute, second, nano);
 
     }
+
+
+
 }

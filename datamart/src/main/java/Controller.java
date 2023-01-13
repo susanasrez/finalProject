@@ -1,5 +1,6 @@
 import database.DBCreate;
 import database.DBInsert;
+import datalakeManager.CalculatorMaxMin;
 
 import java.io.File;
 import java.sql.Connection;
@@ -37,7 +38,8 @@ public class Controller {
             @Override
             public void run() {
                 try {
-                    new DBInsert(conn);
+                    CalculatorMaxMin calculatorMaxMin = new CalculatorMaxMin();
+                    new DBInsert(conn, calculatorMaxMin);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }

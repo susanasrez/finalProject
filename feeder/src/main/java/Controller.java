@@ -11,11 +11,14 @@ public class Controller extends TimerTask{
     public Controller(String apiToken){
         this.root = new File(".\\feeder\\datalakedir");
         this.weatherSensor = new AemetWeatherSensor(apiToken);
-        directory();
         start();
     }
 
     public void start(){
+        if (!root.exists()) {
+            root.mkdirs();
+            System.out.println("Directory created successfully");
+        }
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
@@ -31,13 +34,6 @@ public class Controller extends TimerTask{
             }
         };
         timer.scheduleAtFixedRate(task, 0, 1000 * 60 * 60); // 1000 milliseconds * 60 seconds * 60 minutes
-    }
-
-    public void directory(){
-        if (!root.exists()) {
-            root.mkdirs();
-            System.out.println("Directory created successfully");
-        }
     }
 
     @Override

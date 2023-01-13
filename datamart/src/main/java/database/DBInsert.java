@@ -1,6 +1,7 @@
 package database;
 
 import aemet.Weather;
+import datalakeManager.CalculatorMaxMin;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,16 +11,17 @@ import java.time.LocalDate;
 public class DBInsert implements DBManager{
 
     private final Connection conn;
+    CalculatorMaxMin calculatorMaxMin;
 
-    public DBInsert(Connection conn) throws SQLException {
+    public DBInsert(Connection conn, CalculatorMaxMin calculatorMaxMin) throws SQLException {
+        this.calculatorMaxMin = calculatorMaxMin;
         this.conn = conn;
         insert();
     }
 
     public void insert() {
         delete();
-        ReadDataLake readDataLake = new ReadDataLake();
-        Weather max = readDataLake.maximum();
+        Weather max = calculatorMaxMin.maximum();
         String sqlMax = "INSERT INTO maximum(date,time,place,station,value) VALUES(?,?,?,?,?)";
         try (PreparedStatement pstm = conn.prepareStatement(sqlMax)){
             pstm.setString(1, max.getTs().toLocalDate().toString());
@@ -32,7 +34,7 @@ public class DBInsert implements DBManager{
             throw new RuntimeException(e);
         }
         String sqlMin = "INSERT INTO minimum(date,time,place,station,value) VALUES(?,?,?,?,?)";
-        Weather min = readDataLake.minimum();
+        Weather min = calculatorMaxMin.minimum();
         try (PreparedStatement pstm = conn.prepareStatement(sqlMin)){
             pstm.setString(1, min.getTs().toLocalDate().toString());
             pstm.setString(2, min.getTs().toLocalTime().toString());
